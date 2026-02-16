@@ -1,0 +1,77 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'org.springframework.boot' version '4.0.2'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.diffplug.spotless' version '6.25.0'
+}
+
+group = 'de.unimarburg.diz'
+version = '0.0.1-SNAPSHOT'
+description = 'Webservice to translate feasibility queries to CQL'
+
+java {
+    sourceCompatibility = 21
+    targetCompatibility = 21
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/medizininformatik-initiative/sq2cql")
+        name = "GitHub Medizininformatik-Initiative Packages"
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GH_USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("GH_TOKEN")
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // implementation 'de.medizininformatik-initiative:sq2cql:1.2.0'
+    implementation 'de.medizininformatik-initiative:sq2cql:0.4.0'
+
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy(jacocoTestReport)
+}
+
+jacocoTestReport {
+    dependsOn(test)
+}
+
+jacocoTestReport {
+    reports {
+        csv.required = true
+        csv.outputLocation = layout.buildDirectory.file('jacoco/coverage.csv')
+        html.outputLocation = layout.buildDirectory.dir('jacoco/html')
+    }
+}
+
+jar {
+    enabled = false
+}
+
+bootJar {
+    mainClass.set('de.unimarburg.diz.translate.TranslateApplication')
+}
+
+spotless {
+    java {
+        importOrder() // standard import order
+        // You probably want an empty string at the end - all of the
+        // imports you didn't specify explicitly will go there.
+
+        removeUnusedImports()
+
+        googleJavaFormat()
+    }
+}

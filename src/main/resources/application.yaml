@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: cql-translate
+  http:
+    converters:
+      preferred-json-mapper: jackson2
+cql:
+  ontology-file: ontology/mapping_tree.json
+  mappings-file: ontology/mapping_cql.json
+
