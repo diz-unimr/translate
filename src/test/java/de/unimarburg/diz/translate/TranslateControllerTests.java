@@ -2,14 +2,21 @@ package de.unimarburg.diz.translate;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
+import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
+@TestPropertySource(
+    properties =
+        "cql.ontology-file = classpath:ontology/mapping_tree.json,cql.mapping-file = classpath:ontology/mapping_cql.json")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestTestClient
 public class TranslateControllerTests {
@@ -17,6 +24,17 @@ public class TranslateControllerTests {
   @LocalServerPort private int port;
 
   @Autowired private RestTestClient restTestClient;
+
+  @DynamicPropertySource
+  static void dynamicProperties(DynamicPropertyRegistry registry) {
+    var ontoPath = Paths.get("src", "test", "resources", "ontology");
+
+    registry.add(
+        "cql.ontology-file",
+        () -> ontoPath.resolve("mapping_tree.json").toFile().getAbsolutePath());
+    registry.add(
+        "cql.mapping-file", () -> ontoPath.resolve("mapping_cql.json").toFile().getAbsolutePath());
+  }
 
   @Test
   void translateShouldReturnCql() {
