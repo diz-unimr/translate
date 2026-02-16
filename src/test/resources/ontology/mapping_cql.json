@@ -1,0 +1,19 @@
+[
+  {
+    "context": {
+      "code": "Patient",
+      "display": "Patient",
+      "system": "fdpg.mii.cds",
+      "version": "1.0.0"
+    },
+    "key": {
+      "code": "263495000",
+      "display": "Geschlecht",
+      "system": "http://snomed.info/sct"
+    },
+    "name": "Gender",
+    "resourceType": "Patient",
+    "valueFhirPath": "gender",
+    "valueType": "code"
+  }
+]

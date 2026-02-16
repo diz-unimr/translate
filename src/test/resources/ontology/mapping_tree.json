@@ -1,0 +1,27 @@
+{
+  "children": [
+    {
+      "context": {
+        "code": "Patient",
+        "display": "Patient",
+        "system": "fdpg.mii.cds",
+        "version": "1.0.0"
+      },
+      "termCode": {
+        "code": "263495000",
+        "display": "Geschlecht",
+        "system": "http://snomed.info/sct"
+      }
+    }
+  ],
+  "context": {
+    "code": "Person",
+    "display": "Person",
+    "system": "fdpg.mii.cds"
+  },
+  "termCode": {
+    "code": "Person",
+    "display": "Person",
+    "system": "fdpg.mii.cds"
+  }
+}
