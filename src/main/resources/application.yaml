@@ -7,4 +7,12 @@ spring:
 cql:
   ontology-file: ontology/mapping_tree.json
   mappings-file: ontology/mapping_cql.json
-
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: "health, prometheus, info, metric"
+server:
+  port: 8080

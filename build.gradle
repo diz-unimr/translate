@@ -30,6 +30,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // implementation 'de.medizininformatik-initiative:sq2cql:1.2.0'
     implementation 'de.medizininformatik-initiative:sq2cql:0.4.0'
 
