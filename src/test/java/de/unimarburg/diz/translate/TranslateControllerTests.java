@@ -25,13 +25,13 @@ public class TranslateControllerTests {
   static void dynamicProperties(DynamicPropertyRegistry registry) {
     var classLoader = TranslateControllerTests.class.getClassLoader();
 
-    var onto_file =
+    var ontoFile =
         new File(classLoader.getResource("ontology/mapping_tree.json").getFile()).getAbsolutePath();
-    var mapping_file =
+    var mappingFile =
         new File(classLoader.getResource("ontology/mapping_cql.json").getFile()).getAbsolutePath();
 
-    registry.add("cql.ontology-file", () -> onto_file);
-    registry.add("cql.mappings-file", () -> mapping_file);
+    registry.add("cql.ontology-file", () -> ontoFile);
+    registry.add("cql.mappings-file", () -> mappingFile);
   }
 
   @Test
