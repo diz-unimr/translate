@@ -1,3 +1,4 @@
+---
 REPOSITORY_KICS_ARGUMENTS: --fail-on high
 COPYPASTE_JSCPD_ARGUMENTS: --ignore-pattern "import .*;"
 REPOSITORY_TRIVY_DISABLE_ERRORS: true
