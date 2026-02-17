@@ -2,21 +2,19 @@ package de.unimarburg.diz.translate;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
-import java.nio.file.Paths;
+import java.io.File;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
-@TestPropertySource(
-    properties =
-        "cql.ontology-file = classpath:ontology/mapping_tree.json,cql.mapping-file = classpath:ontology/mapping_cql.json")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestTestClient
 public class TranslateControllerTests {
@@ -27,13 +25,25 @@ public class TranslateControllerTests {
 
   @DynamicPropertySource
   static void dynamicProperties(DynamicPropertyRegistry registry) {
-    var ontoPath = Paths.get("src", "test", "resources", "ontology");
+    var classLoader = TranslateControllerTests.class.getClassLoader();
 
-    registry.add(
-        "cql.ontology-file",
-        () -> ontoPath.resolve("mapping_tree.json").toFile().getAbsolutePath());
-    registry.add(
-        "cql.mapping-file", () -> ontoPath.resolve("mapping_cql.json").toFile().getAbsolutePath());
+    var onto_file =
+        new File(classLoader.getResource("ontology/mapping_tree.json").getFile()).getAbsolutePath();
+    var mapping_file =
+        new File(classLoader.getResource("ontology/mapping_cql.json").getFile()).getAbsolutePath();
+
+    registry.add("cql.ontology-file", () -> onto_file);
+    registry.add("cql.mapping-file", () -> mapping_file);
+  }
+
+  @TestConfiguration
+  static class TranslateConfig {
+
+    @Value("${cql.mappings-file}")
+    private String mappingsFile;
+
+    @Value("${cql.ontology-file}")
+    private String ontologyFile;
   }
 
   @Test
