@@ -5,10 +5,8 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import java.io.File;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -33,17 +31,7 @@ public class TranslateControllerTests {
         new File(classLoader.getResource("ontology/mapping_cql.json").getFile()).getAbsolutePath();
 
     registry.add("cql.ontology-file", () -> onto_file);
-    registry.add("cql.mapping-file", () -> mapping_file);
-  }
-
-  @TestConfiguration
-  static class TranslateConfig {
-
-    @Value("${cql.mappings-file}")
-    private String mappingsFile;
-
-    @Value("${cql.ontology-file}")
-    private String ontologyFile;
+    registry.add("cql.mappings-file", () -> mapping_file);
   }
 
   @Test
