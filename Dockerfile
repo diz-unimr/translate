@@ -14,7 +14,9 @@ WORKDIR /opt/translate
 COPY --from=build /home/gradle/src/dependencies/ ./
 COPY --from=build /home/gradle/src/spring-boot-loader/ ./
 COPY --from=build /home/gradle/src/application/ ./
+COPY HealthCheck.java .
 
+USER nonroot
 ARG GIT_REF=""
 ARG GIT_URL=""
 ARG BUILD_TIME=""
@@ -24,6 +26,8 @@ ENV APP_VERSION=${VERSION} \
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-XX:MaxRAMPercentage=90", "org.springframework.boot.loader.launch.JarLauncher"]
+
+HEALTHCHECK --interval=25s --timeout=3s --retries=2 CMD ["java", "HealthCheck.java", "||", "exit", "1"]
 
 LABEL org.opencontainers.image.created=${BUILD_TIME} \
     org.opencontainers.image.authors="Sebastian Stöcker" \

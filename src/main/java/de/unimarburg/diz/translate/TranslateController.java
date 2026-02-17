@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tools.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/translate")
@@ -14,13 +13,13 @@ class TranslateController {
 
   private final Translator translator;
 
-  TranslateController(Translator translator, ObjectMapper mapper) {
+  TranslateController(Translator translator) {
     this.translator = translator;
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<?> translate(@RequestBody StructuredQuery sq) {
+  public ResponseEntity<?> translate(final @RequestBody StructuredQuery sq) {
 
     var cql = translator.toCql(sq).print();
 
