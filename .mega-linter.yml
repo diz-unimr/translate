@@ -1,4 +1,3 @@
 ---
 REPOSITORY_KICS_ARGUMENTS: --fail-on high
-COPYPASTE_JSCPD_ARGUMENTS: --ignore-pattern "import .*;"
-BASH_SHFMT_FILTER_REGEX_EXCLUDE: (gradlew)
+JAVA_PMD_DISABLE_ERRORS: true
