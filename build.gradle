@@ -11,8 +11,7 @@ version = '0.0.1-SNAPSHOT'
 description = 'Webservice to translate feasibility queries to CQL'
 
 java {
-    sourceCompatibility = 21
-    targetCompatibility = 21
+    sourceCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
@@ -42,20 +41,16 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    finalizedBy(jacocoTestReport)
-}
-
-jacocoTestReport {
-    dependsOn(test)
 }
 
 jacocoTestReport {
     reports {
-        csv.required = true
-        csv.outputLocation = layout.buildDirectory.file('jacoco/coverage.csv')
-        html.outputLocation = layout.buildDirectory.dir('jacoco/html')
+        xml.required = true
+        html.required = false
     }
 }
+
+check.dependsOn jacocoTestReport
 
 jar {
     enabled = false
