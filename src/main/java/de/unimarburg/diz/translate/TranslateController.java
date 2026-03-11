@@ -2,6 +2,7 @@ package de.unimarburg.diz.translate;
 
 import de.numcodex.sq2cql.Translator;
 import de.numcodex.sq2cql.model.structured_query.StructuredQuery;
+import de.numcodex.sq2cql.model.structured_query.TranslationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +22,14 @@ class TranslateController {
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<?> translate(final @RequestBody StructuredQuery sq) {
 
-    var cql = translator.toCql(sq).print();
-
     var headers = new HttpHeaders();
-    headers.add(HttpHeaders.CONTENT_TYPE, "text/cql;charset=UTF-8");
-    return new ResponseEntity<>(cql, headers, HttpStatus.OK);
+    try {
+      var cql = translator.toCql(sq).print();
+      headers.add(HttpHeaders.CONTENT_TYPE, "text/cql;charset=UTF-8");
+      return new ResponseEntity<>(cql, headers, HttpStatus.OK);
+    } catch (TranslationException e) {
+      headers.add(HttpHeaders.CONTENT_TYPE, "text/plain;charset=UTF-8");
+      return new ResponseEntity<>(e.getMessage(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
