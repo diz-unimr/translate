@@ -89,6 +89,7 @@ public class TranslateConfig {
                 entry("http://fhir.de/CodeSystem/Kontaktebene", "kontaktebene"),
                 entry("http://www.orpha.net", "orphanet"),
                 entry("fdpg.consent.combined", "fdpgcombinedconsent"),
-                entry("http://hl7.org/fhir/consent-provision-type", "provisiontype"))));
+                entry("http://hl7.org/fhir/consent-provision-type", "provisiontype"),
+                entry("https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code", "swisslab"))));
   }
 }
