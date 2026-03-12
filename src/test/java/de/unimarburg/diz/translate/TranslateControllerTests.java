@@ -1,5 +1,6 @@
 package de.unimarburg.diz.translate;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 import java.io.File;
@@ -38,38 +39,38 @@ public class TranslateControllerTests {
   void translateShouldReturnCql() {
     var reqBody =
         """
-                        {
-                          "inclusionCriteria": [
-                            [
-                              {
-                                "termCodes": [
-                                  {
-                                    "code": "263495000",
-                                    "display": "Geschlecht",
-                                    "system": "http://snomed.info/sct",
-                                    "version": ""
-                                  }
-                                ],
-                                "context": {
-                                  "code": "Patient",
-                                  "display": "Patient",
-                                  "system": "fdpg.mii.cds",
-                                  "version": "1.0.0"
-                                },
-                                "valueFilter": {
-                                  "selectedConcepts": [
-                                    {
-                                      "code": "male",
-                                      "display": "Male",
-                                      "system": "http://hl7.org/fhir/administrative-gender"
-                                    }
-                                  ],
-                                  "type": "concept"
-                                }
-                              }
-                            ]
-                          ]
-                        }""";
+        {
+          "inclusionCriteria": [
+            [
+              {
+                "termCodes": [
+                  {
+                    "code": "263495000",
+                    "display": "Geschlecht",
+                    "system": "http://snomed.info/sct",
+                    "version": ""
+                  }
+                ],
+                "context": {
+                  "code": "Patient",
+                  "display": "Patient",
+                  "system": "fdpg.mii.cds",
+                  "version": "1.0.0"
+                },
+                "valueFilter": {
+                  "selectedConcepts": [
+                    {
+                      "code": "male",
+                      "display": "Male",
+                      "system": "http://hl7.org/fhir/administrative-gender"
+                    }
+                  ],
+                  "type": "concept"
+                }
+              }
+            ]
+          ]
+        }""";
 
     restTestClient
         .post()
@@ -77,20 +78,61 @@ public class TranslateControllerTests {
         .body(reqBody)
         .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
+        .expectStatus()
+        .isOk()
         .expectBody(String.class)
         .isEqualTo(
             """
-                                library Retrieve version '1.0.0'
-                                using FHIR version '4.0.0'
-                                include FHIRHelpers version '4.0.0'
+                    library Retrieve version '1.0.0'
+                    using FHIR version '4.0.0'
+                    include FHIRHelpers version '4.0.0'
 
-                                context Patient
+                    context Patient
 
-                                define Criterion:
-                                  Patient.gender = 'male'
+                    define Criterion:
+                      Patient.gender = 'male'
 
-                                define InInitialPopulation:
-                                  Criterion
-                                """);
+                    define InInitialPopulation:
+                      Criterion
+                    """);
+  }
+
+  @Test
+  void responseReturnsTranslationError() {
+    var reqBody =
+        """
+            {
+              "inclusionCriteria": [
+                [
+                  {
+                    "termCodes": [
+                      {
+                        "code": "",
+                        "display": "",
+                        "system": "",
+                        "version": ""
+                      }
+                    ],
+                    "context": {
+                      "code": "",
+                      "display": "",
+                      "system": "",
+                      "version": ""
+                    }
+                  }
+                ]
+              ]
+            }""";
+
+    restTestClient
+        .post()
+        .uri("http://localhost:%d/translate".formatted(port))
+        .body(reqBody)
+        .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .exchange()
+        .expectStatus()
+        .is5xxServerError()
+        .expectBody(String.class)
+        .value(b -> assertThat(b).startsWith("Failed to expand the concept"));
   }
 }
