@@ -5,8 +5,15 @@ spring:
     converters:
       preferred-json-mapper: jackson2
 cql:
-  ontology-file: ontology/mapping_tree.json
-  mappings-file: ontology/mapping_cql.json
+  ontology:
+    local:
+      ontology-file: ontology/mapping_tree.json
+      mappings-file: ontology/mapping_cql.json
+    pkg:
+      version:
+      credentials:
+        user:
+        password:
 management:
   server:
     port: 8081
