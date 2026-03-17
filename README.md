@@ -31,14 +31,27 @@ The RESTful API comprises a single endpoint to translate a feasibility query in 
 > | `500` Internal Server Error | `text/plain;charset=UTF-8` | Error message |
 
 
+## Ontology
+
+The [MII - CCDL to CQL Translator](https://github.com/medizininformatik-initiative/sq2cql) needs an ontology
+(or mapping tree) file and a mapping (file) of concepts (StructuredQuery) to FHIR path in order to translate criteria to CQL.
+
+Alternatively those files can be provided by a GitLab package registry. However, this is currently hard coded to the
+Marburg GitLab package registry.
+
+See configuration properties for the respective variables.
+
 ## Configuration properties
 
 The following environment variables can be set:
 
-| Variable          | Default                    | Description        |
-|-------------------|----------------------------|--------------------|
-| cql.ontology-file | ontology/mapping_tree.json | Ontology tree file |
-| cql.mappings-file | ontology/mapping_cql.json  | CQL mappings file  |
+| Variable                              | Default                    | Description                                   |
+|---------------------------------------|----------------------------|-----------------------------------------------|
+| cql.ontology.local.ontology-file      | ontology/mapping_tree.json | Ontology tree file (local)                    |
+| cql.ontology.local.mappings-file      | ontology/mapping_cql.json  | CQL mappings file (local)                     |
+| cql.ontology.pkg.version              |                            | Ontology package version (remote)             |
+| cql.ontology.pkg.credentials.user     |                            | Ontology package Basic Auth user (remote)     |
+| cql.ontology.pkg.credentials.password |                            | Ontology package Basic Auth password (remote) |
 
 Additional application properties can be set by overriding values form the [application.yaml](src/main/resources/application.yaml) with using environment variables.
 

@@ -31,8 +31,8 @@ public class TranslateControllerTests {
     var mappingFile =
         new File(classLoader.getResource("ontology/mapping_cql.json").getFile()).getAbsolutePath();
 
-    registry.add("cql.ontology-file", () -> ontoFile);
-    registry.add("cql.mappings-file", () -> mappingFile);
+    registry.add("cql.ontology.local.ontology-file", () -> ontoFile);
+    registry.add("cql.ontology.local.mappings-file", () -> mappingFile);
   }
 
   @Test
