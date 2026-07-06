@@ -196,6 +196,7 @@ public class TranslateConfiguration {
                 entry("http://www.orpha.net", "orphanet"),
                 entry("fdpg.consent.combined", "fdpgcombinedconsent"),
                 entry("http://hl7.org/fhir/consent-provision-type", "provisiontype"),
-                entry("https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code", "swisslab"))));
+                entry("https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code", "swisslab"),
+                entry("http://hl7.org/fhir/ValueSet/diagnosis-role", "diagnosisuse"))));
   }
 }
