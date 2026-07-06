@@ -197,6 +197,6 @@ public class TranslateConfiguration {
                 entry("fdpg.consent.combined", "fdpgcombinedconsent"),
                 entry("http://hl7.org/fhir/consent-provision-type", "provisiontype"),
                 entry("https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code", "swisslab"),
-                entry("http://hl7.org/fhir/ValueSet/diagnosis-role", "diagnosisuse"))));
+                entry("http://terminology.hl7.org/CodeSystem/diagnosis-role", "diagnosisuse"))));
   }
 }
