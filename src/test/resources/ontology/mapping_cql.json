@@ -1,5 +1,6 @@
 [
   {
+    "attributes": [],
     "context": {
       "code": "Patient",
       "display": "Patient",
@@ -13,7 +14,10 @@
     },
     "name": "Gender",
     "resourceType": "Patient",
-    "valueFhirPath": "gender",
-    "valueType": "code"
+    "value": {
+      "cardinality": "single",
+      "path": "gender",
+      "types": ["code"]
+    }
   }
 ]

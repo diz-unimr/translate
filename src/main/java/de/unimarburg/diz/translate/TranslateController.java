@@ -1,8 +1,8 @@
 package de.unimarburg.diz.translate;
 
-import de.numcodex.sq2cql.Translator;
-import de.numcodex.sq2cql.model.structured_query.StructuredQuery;
-import de.numcodex.sq2cql.model.structured_query.TranslationException;
+import de.medizininformatikinitiative.cctb.Translator;
+import de.medizininformatikinitiative.cctb.model.structured_query.StructuredQuery;
+import de.medizininformatikinitiative.cctb.model.structured_query.TranslationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
