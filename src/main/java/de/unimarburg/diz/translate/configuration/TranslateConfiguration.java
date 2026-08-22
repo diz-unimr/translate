@@ -1,23 +1,9 @@
 package de.unimarburg.diz.translate.configuration;
 
-import static java.util.Map.entry;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import de.numcodex.sq2cql.Translator;
-import de.numcodex.sq2cql.model.Mapping;
-import de.numcodex.sq2cql.model.MappingContext;
-import de.numcodex.sq2cql.model.TermCodeNode;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.zip.ZipFile;
+import de.medizininformatikinitiative.cctb.Translator;
+import de.medizininformatikinitiative.cctb.model.Mapping;
+import de.medizininformatikinitiative.cctb.model.MappingContext;
+import de.medizininformatikinitiative.cctb.model.MappingTreeBase;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.auth.AuthScope;
 import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
@@ -38,6 +24,22 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.server.ResponseStatusException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.zip.ZipFile;
+
+import static java.util.Map.entry;
+
 
 @Configuration
 @EnableConfigurationProperties
@@ -52,7 +54,7 @@ public class TranslateConfiguration {
   @Qualifier("translation")
   @Bean
   ObjectMapper mapper() {
-    return new ObjectMapper().disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    return new ObjectMapper();
   }
 
   @Lazy
@@ -64,8 +66,9 @@ public class TranslateConfiguration {
 
     if (version.isBlank()) {
       // local
-      return new OntologyMappings(
-          mapper.readValue(new File(props.getLocal().getOntologyFile()), TermCodeNode.class),
+      return new OntologyMappings(new MappingTreeBase(
+          mapper.readValue(new File(props.getLocal().getOntologyFile()), new TypeReference<>() {
+          })),
           mapper.readValue(new File(props.getLocal().getMappingsFile()), Mapping[].class));
     } else {
       // remote
@@ -95,7 +98,7 @@ public class TranslateConfiguration {
       try (var conceptTreeStream = zipFile.getInputStream(ontologyResource);
           var mappingsStream = zipFile.getInputStream(mappingsResource)) {
         return new OntologyMappings(
-            mapper.readValue(conceptTreeStream, TermCodeNode.class),
+            mapper.readValue(conceptTreeStream, MappingTreeBase.class),
             mapper.readValue(mappingsStream, Mapping[].class));
       }
     }
