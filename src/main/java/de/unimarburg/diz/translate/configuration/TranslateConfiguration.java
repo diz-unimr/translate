@@ -97,8 +97,10 @@ public class TranslateConfiguration {
 
       try (var conceptTreeStream = zipFile.getInputStream(ontologyResource);
           var mappingsStream = zipFile.getInputStream(mappingsResource)) {
+
         return new OntologyMappings(
-            mapper.readValue(conceptTreeStream, MappingTreeBase.class),
+            new MappingTreeBase(mapper.readValue(conceptTreeStream,
+                new TypeReference<>(){})),
             mapper.readValue(mappingsStream, Mapping[].class));
       }
     }
